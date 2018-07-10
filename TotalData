@@ -1,0 +1,738 @@
+1.Base
+BaseUtil.java @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+package Base;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import configs.Configuration;
+import configs.Constant;
+
+/**
+ * Created by GANESH GUNAKI
+ */
+
+public class BaseUtil {
+
+	public static WebDriver driver ;
+
+	public static Properties Repository = new Properties();
+	public static File f;
+	public static FileInputStream FI;
+	public WebElement element = null;
+
+	//	public static void loadPropertiesFile() throws IOException {
+	//		// f = new File(System.getProperty("user.dir") + "\\src\\main\\java\\locators\\"
+	//		// + MobileOSValue + "\\obj.properties");
+	//		f = new File(
+	//				System.getProperty("user.dir") + "\\src\\locators\\" + Constant.MobileOSValue + "\\obj.properties");
+	//		FI = new FileInputStream(f);
+	//		Repository.load(FI);
+	//		// f = new
+	//		// File(System.getProperty("user.dir")+"\\src\\com\\actiTime\\pageLocators\\loginpage.properties");
+	//	}
+	//
+	//	public static WebElement getLocator(String locator) throws Exception {
+	//		String[] split = locator.split(":");
+	//		String locatorType = split[0];
+	//		String locatorValue = split[1];
+	//		if (locatorType.toLowerCase().equals("id"))
+	//			return driver.findElement(By.id(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("name"))
+	//			return driver.findElement(By.name(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("classname")) || (locatorType.toLowerCase().equals("class")))
+	//			return driver.findElement(By.className(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("tagname")) || (locatorType.toLowerCase().equals("tag")))
+	//			return driver.findElement(By.className(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("linktext")) || (locatorType.toLowerCase().equals("link")))
+	//			return driver.findElement(By.linkText(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("partiallinktext"))
+	//			return driver.findElement(By.partialLinkText(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("cssselector")) || (locatorType.toLowerCase().equals("css")))
+	//			return driver.findElement(By.cssSelector(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("xpath"))
+	//			return driver.findElement(By.xpath(locatorValue));
+	//		else
+	//			throw new Exception("Unknown locator type '" + locatorType + "'");
+	//	}
+	//
+	//	public static List<WebElement> getLocators(String locator) throws Exception {
+	//		String[] split = locator.split(":");
+	//		String locatorType = split[0];
+	//		String locatorValue = split[1];
+	//		if (locatorType.toLowerCase().equals("id"))
+	//			return driver.findElements(By.id(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("name"))
+	//			return driver.findElements(By.name(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("classname")) || (locatorType.toLowerCase().equals("class")))
+	//			return driver.findElements(By.className(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("tagname")) || (locatorType.toLowerCase().equals("tag")))
+	//			return driver.findElements(By.className(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("linktext")) || (locatorType.toLowerCase().equals("link")))
+	//			return driver.findElements(By.linkText(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("partiallinktext"))
+	//			return driver.findElements(By.partialLinkText(locatorValue));
+	//		else if ((locatorType.toLowerCase().equals("cssselector")) || (locatorType.toLowerCase().equals("css")))
+	//			return driver.findElements(By.cssSelector(locatorValue));
+	//		else if (locatorType.toLowerCase().equals("xpath"))
+	//			return driver.findElements(By.xpath(locatorValue));
+	//		else
+	//			throw new Exception("Unknown locator type '" + locatorType + "'");
+	//	}
+	//
+	//	public WebElement getWebElement(String locator) throws Exception {
+	//		return getLocator(Repository.getProperty(locator));
+	//	}
+	//
+	//	public List<WebElement> getWebElements(String locator) throws Exception {
+	//		return getLocators(Repository.getProperty(locator));
+	//	}
+	//
+	//	public boolean clickAction(String locator) {
+	//		try {
+	//			element = getWebElement(locator);
+	//		} catch (Exception e1) {
+	//			e1.printStackTrace();
+	//		}
+	//		WebDriverWait wait = new WebDriverWait(driver, Constant.WEBDRIVER_WAIT);
+	//		wait.until(ExpectedConditions.elementToBeClickable(element));
+	//		try {
+	//			element.click();
+	//			Thread.sleep(2000);
+	//			return true;
+	//		} catch (Exception e) {
+	//			e.printStackTrace();
+	//			return false;
+	//		}
+	//	}
+
+	public static void openURL() throws MalformedURLException, AssertionError, NoSuchElementException, Exception {
+		System.out.println("\n Launching:  Browser now...");
+		try {
+			driver.get(Configuration.BaseURL);
+			driver.manage().window().maximize();
+			driver.manage().timeouts().implicitlyWait(Constant.IMPLICIT_WAIT, TimeUnit.SECONDS);
+			System.out.println("Open Base URL:"+Configuration.BaseURL +"/n");
+		} catch (Exception ex) {
+			System.out.println("\n Unable to open URL: not sure why" + ex);
+		}
+	}
+
+	public boolean setText(WebElement element, String testData) {
+		WebDriverWait wait = new WebDriverWait(driver, Constant.IMPLICIT_WAIT);
+		wait.until(ExpectedConditions.visibilityOf(element));
+		try {
+			element.sendKeys(testData);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public boolean IsElementfound(WebElement element) {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(element.isDisplayed()){
+			System.out.println("Element is Present");
+			return true;
+		}else{
+			System.out.println("Element is Absent");
+			return false;
+		}
+	}
+
+	public void navigateback() {
+		driver.navigate().back();
+
+	}
+
+
+	public void teardown() {
+		driver.quit();
+
+	}
+
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+
+
+2.configs
+Configuration.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package configs;
+
+public class Configuration {
+
+	public static String workingDir = System.getProperty("user.dir");
+	public static final String BrowserName = "Chrome";
+	public static final String Excel_TestCases = workingDir+"\\src\\Resources\\TestData.xlsx";
+	public static final String BaseURL = "https://www.bnymellon.com";
+}
+
+
+Configuration.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package configs;
+
+public class Constant {
+	
+	public static String MobileOSValue="";
+	public static String MobileOS=null;
+	public static String browser="Desktop Chrome";
+	
+	
+	
+public static long IMPLICIT_WAIT=5000;
+public static long WEBDRIVER_WAIT=5000;
+
+
+	
+}
+
+extent-config.xml@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+    <configuration>
+        <!-- report theme -->
+        <!-- standard, dark -->
+        <theme>standard</theme>
+    
+        <!-- document encoding -->
+        <!-- defaults to UTF-8 -->
+        <encoding>UTF-8</encoding>
+        
+        <!-- protocol for script and stylesheets -->
+        <!-- defaults to https -->
+        <protocol>https</protocol>
+        
+        <!-- title of the document -->
+        <documentTitle>CucumberExtentReport</documentTitle>
+        
+        <!-- report name - displayed at top-nav -->
+        <reportName>Automation Report</reportName>
+        
+        <!-- location of charts in the test view -->
+        <!-- top, bottom -->
+        <testViewChartLocation>bottom</testViewChartLocation>
+        
+        <!-- custom javascript -->
+        <scripts>
+            <![CDATA[
+                $(document).ready(function() {
+                    
+                });
+            ]]>
+        </scripts>
+        
+        <!-- custom styles -->
+        <styles>
+            <![CDATA[
+                
+            ]]>
+        </styles>
+    </configuration>
+</extentreports>
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+3.Features
+
+BNY.feature@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+ Feature: FRB Smoke Test
+
+# Initializing the new browser 
+@setup
+Scenario: Validate BNY Site 
+	Given Open BNY Site 
+	When click on who we are button 
+	Then I validate i am in Who we are. 
+
+Scenario: check other search button  
+	Given Open already BNY Site 
+	When click on search button 
+	Then I validate search button is visible. 
+
+Scenario: check other search button  
+	Given landed in home page 
+	When click on who we are button once again  
+	Then I validate i am in Who we arePage.  
+
+
+
+@teardown
+Scenario: Validate BNY Site 
+	Given Close BNY Site 
+
+
+
+		
+	#	Scenario Outline: Successful Login with Valid Credentials
+	#    Given User is on Home Page
+	#    When User Navigate to LogIn Page
+	#    And User enters "<username>" and "<password>"
+	#    Then Message displayed Login Successfully
+	#
+	#	Examples:
+	#	| username   | password |
+	#    | testuser | Test@123 |
+	#
+  
+  ----------------------------------------------------------------------------------------------
+  
+  
+
+locators
+obj.properties@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+search.google.btn=xpath://*[@id="tsf"]/div[2]/div[3]/center/input[1]
+locators.Android
+
+locators.iOS
+------------------------------------------------------------------------------------------------
+pages
+---Page_BNY.java @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package pages;
+
+import org.apache.bcel.verifier.exc.AssertionViolatedException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import Base.BaseUtil;
+
+
+/**
+ * Created by Karthik on 10/25/2016.
+ */
+public class Page_BNY extends BaseUtil {
+
+	public Page_BNY() {
+		PageFactory.initElements(driver, this);
+	}
+
+	@FindBy(how = How.XPATH, using = "/html/body/nav[3]/div[2]/ul/li[1]/a")
+	public WebElement whoWeare_Btn;
+
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"ourstory\"]/a/div/span")
+	public WebElement ViewOurStory_Btn;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"companyprofile\"]/div[1]/h2")
+	public WebElement label_companyprofile;
+
+
+	@FindBy(how = How.XPATH, using = "//*[@class='search-icon']")
+	public WebElement Search_Btn;
+
+
+
+	public Page_WhoWeAre ClickWhoWeare_Btn()
+	{
+		whoWeare_Btn.click();
+		return new Page_WhoWeAre();
+	}
+
+
+
+	public void ClickViewOurStory_Btn()
+	{
+		ViewOurStory_Btn.click();
+	}
+
+	public void ValidatePage()
+	{
+		if (IsElementfound(label_companyprofile))
+			Assert.assertTrue(true, "Passed: landed on Our page");
+		else
+			Assert.assertTrue(false, "FAIL: Not landed on Our page");
+	}
+
+	public void ValidateSearchBtn()
+	{
+		if (IsElementfound(Search_Btn))
+			Assert.assertTrue(true, "Passed: search button is available");
+		else
+			Assert.assertTrue(false, "FAIL: search button is not available");
+	}
+
+
+
+
+}
+-----------------------------------------------------------------------------------------------------------------------
+Page_WhoWeAre.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import Base.BaseUtil;
+
+
+/**
+ * Created by Karthik on 10/25/2016.
+ */
+public class Page_WhoWeAre extends BaseUtil {
+
+	public Page_WhoWeAre() {
+		PageFactory.initElements(driver, this);
+	}
+
+	@FindBy(how = How.XPATH, using = "/html/body/nav[3]/div[2]/ul/li[1]/a")
+	public WebElement whoWeare_Btn;
+
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"ourstory\"]/a/div/span")
+	public WebElement ViewOurStory_Btn;
+
+	public void Validate_ViewOurStory_Btn()
+	{
+		if (IsElementfound(ViewOurStory_Btn))
+			Assert.assertTrue(true, "Passed: ViewOurStory_Btn is seen ");
+		else
+			Assert.assertTrue(false, "FAIL: ViewOurStory_Btn is not seen");
+	}
+
+
+
+
+
+}
+
+
+--------------------------------------------------------------------------------------------------
+
+Resources
+
+chromedriver.exe
+geckodriver.exe
+TestData.xlsx
+
+-------------------------------------------------------------------------------------------------
+
+
+Runner
+
+class: TestRunner.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package Runner;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.Test;
+
+import com.cucumber.listener.Reporter;
+
+import configs.Configuration;
+import cucumber.api.CucumberOptions;
+import cucumber.api.testng.AbstractTestNGCucumberTests;
+
+//@RunWith(Cucumber.class)
+@CucumberOptions(
+		//All Feature files.......		
+		//		features="src/Features" ,
+		//Specified feature files....		
+		features={"src/Features/DataDriven.feature" ,"src/Features/Login.feature"},
+		glue={"Step_Definition","Utility"},
+		monochrome = true,
+		//plugin = {"html:Report"}
+		plugin = { "com.cucumber.listener.ExtentCucumberFormatter:Report/cucumber-reports/report.html"}
+		//Tags can be feature file or scenario , skipping use ~ symbol : ~@smokeTest
+		
+	,	tags={"@FRB_smokeTest"}
+		)
+
+
+@Test
+public class TestRunner extends AbstractTestNGCucumberTests
+{
+	public static	WebDriver driver;
+	@AfterClass
+	public static void writeExtentReport() {
+		//		Reporter.addScenarioLog("hiiiiiiiiiiiiiiiiiiiiiiiii");
+
+		Reporter.assignAuthor("GANESH GUNAKI");
+		Reporter.loadXMLConfig(Configuration.workingDir+"\\src\\configs\\extent-config.xml");
+		Reporter.addStepLog("<END OF THE REPORT>");
+	}
+
+
+}
+-----------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+TestRunner4.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package Runner;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.Test;
+
+import com.cucumber.listener.Reporter;
+
+import configs.Configuration;
+import cucumber.api.CucumberOptions;
+import cucumber.api.testng.AbstractTestNGCucumberTests;
+
+//@RunWith(Cucumber.class)
+@CucumberOptions(
+//All Feature files.......		
+//		features="src/Features" ,
+//Specified feature files....		
+		features={"src/Features/BNY.feature"},
+		glue={"Step_Definition","Utility"},
+		monochrome = true,
+		//plugin = {"html:Report"}
+		plugin = { "com.cucumber.listener.ExtentCucumberFormatter:Report/cucumber-reports/report4.html"}
+		//Tags can be feature file or scenario , skipping use ~ symbol : ~@smokeTest
+//		,tags={"@setup"}
+		)
+
+
+@Test
+public class TestRunner4 extends AbstractTestNGCucumberTests
+{
+public static	WebDriver driver;
+	@AfterClass
+	public static void writeExtentReport() {
+//		Reporter.addScenarioLog("hiiiiiiiiiiiiiiiiiiiiiiiii");
+		
+
+		Reporter.loadXMLConfig(Configuration.workingDir+"\\src\\configs\\extent-config.xml");
+		Reporter.assignAuthor("GANESH GUNAKI");
+		Reporter.addStepLog("<END OF THE REPORT>");
+	}
+
+
+}
+------------------------------------------------------------------------------------------------------
+
+
+Step_Definition
+
+BNYSteps.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package Step_Definition;
+
+import org.testng.Assert;
+
+import Base.BaseUtil;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import pages.Page_BNY;
+
+public class BNYSteps extends BaseUtil {
+
+	Page_BNY Page_BNY= new Page_BNY();
+
+	@Given("^Open BNY Site$")
+	public void open_BNY_Site() throws Throwable {
+		openURL();
+	}
+
+	@When("^click on who we are button$")
+	public void click_on_who_we_are_button() throws Throwable {
+		Page_BNY.ClickWhoWeare_Btn();
+		Page_BNY.ClickViewOurStory_Btn();
+	}
+
+	@Then("^I validate i am in Who we are\\.$")
+	public void i_validate_i_am_in_Who_we_are() throws Throwable {
+		Page_BNY.ValidatePage();
+	}
+
+
+	@Given("^Open already BNY Site$")
+	public void open_already_BNY_Site() throws Throwable {
+
+		Assert.assertTrue(true, "2nd Scenario started......");
+	}
+
+	@When("^click on search button$")
+	public void click_on_search_button() throws Throwable {
+		Page_BNY.Search_Btn.click();
+	}
+
+	@Then("^I validate search button is visible\\.$")
+	public void i_validate_search_button_is_visible() throws Throwable {
+		Page_BNY.ValidateSearchBtn();
+	}
+
+
+
+}
+---------------------------------------------------------------------------------------------------
+
+
+
+BNYWhoWeAreSteps.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+package Step_Definition;
+
+import Base.BaseUtil;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import pages.Page_BNY;
+import pages.Page_WhoWeAre;
+
+public class BNYWhoWeAreSteps extends BaseUtil {
+
+	Page_WhoWeAre Page_WhoWeAre= new Page_WhoWeAre();
+Page_BNY Page_BNY=new Page_BNY(); 
+
+	@Given("^landed in home page$")
+	public void landed_in_home_page() throws Throwable {
+		navigateback();
+		navigateback();
+	}
+
+	@When("^click on who we are button once again$")
+	public void click_on_who_we_are_button_once_again() throws Throwable {
+		Page_WhoWeAre =Page_BNY.ClickWhoWeare_Btn();
+	}
+
+	@Then("^I validate i am in Who we arePage\\.$")
+	public void i_validate_i_am_in_Who_we_arePage() throws Throwable {
+		Page_WhoWeAre.Validate_ViewOurStory_Btn();
+	}
+
+	@Given("^Close BNY Site$")
+	public void close_BNY_Site() throws Throwable {
+		//handled by teardown
+	}
+
+
+
+}
+---------------------------------------------------------------------------------------------
+
+
+
+Hook.java@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+package Step_Definition;
+
+import java.io.IOException;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import Base.BaseUtil;
+import configs.Constant;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+
+/**
+ * @author GANESH GUNAKI
+ *
+ */
+public class Hook extends BaseUtil {
+
+	public String MobileOSValue = Constant.MobileOS;
+	public String BrowserName = Constant.browser;
+
+
+
+	@Before("@setup")
+	public void beforeScenario() throws IOException {
+		System.out.println("This will run before the Scenario");
+
+		//		loadPropertiesFile();
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+		try {
+			switch (BrowserName) {
+			case "Desktop Chrome":
+				System.setProperty("webdriver.chrome.driver",
+						"C:\\Users\\ganesh.gunaki\\Downloads\\BDD_CucumberZip\\BDD_Cucumber\\src\\Resources\\chromedriver.exe");
+				ChromeOptions options = new ChromeOptions();
+				options.setExperimentalOption("useAutomationExtension", false);
+				System.out.println(driver);
+				driver = new ChromeDriver(options);
+				// driver= new RemoteWebDriver(new URL("http://127.0.0.1:8080/wd/hub"),
+				// capabilities);
+				break;
+			case "Desktop Firefox":
+				break;
+			}
+			capabilities.setCapability("scriptName", "Give Script Name");
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
+
+
+	@After("@teardown")
+	public void teardown() {
+		System.out.println("This will run for closing browser");
+		driver.quit();
+	}
+
+
+	@Before
+	public void beforeScenario11(){
+		System.out.println("This will run before the every Scenario");
+	}
+
+
+	@After
+	public void afterScenario() {
+		System.out.println("This will run after the every Scenario");
+	}
+
+
+	@Before("@smokeTest")
+	public void beforeThird() {
+		System.out.println("i am executing before Smoke Test Scenario========================");
+	}
+
+	@After("@smokeTest")
+	public void afterFirst() {
+		System.out.println("i am executing before Smoke Test Scenario========================");
+	}
+}
+
+
